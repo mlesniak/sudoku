@@ -57,6 +57,18 @@ class Grid {
     }
 }
 
+class Sudoku {
+    val grids: Grid2D<Grid>
+
+    init {
+        val rows = mutableListOf<MutableList<Grid>>()
+        for (i in 0..2) {
+            rows.add(mutableListOf(Grid(), Grid(), Grid()))
+        }
+        grids = rows
+    }
+}
+
 fun main() {
     val g = Grid()
     g.set(0, 0, 1)
