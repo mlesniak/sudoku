@@ -45,6 +45,8 @@ class Grid {
         values[y][x] = value
     }
 
+    fun get(x: Int, y: Int) : Int = values[y][x]
+
     fun complete(): Boolean {
         val vals = values.flatten()
         for (i in 1..9) {
@@ -58,7 +60,7 @@ class Grid {
 }
 
 class Sudoku {
-    val grids: Grid2D<Grid>
+    private val grids: Grid2D<Grid>
 
     init {
         val rows = mutableListOf<MutableList<Grid>>()
@@ -67,20 +69,25 @@ class Sudoku {
         }
         grids = rows
     }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+
+        for (y in 0 until 9) {
+            for (x in 0 until 9) {
+                val gx = x/3
+                val gy = y/3
+                sb.append(grids[gy][gx].get(x%3, y%3))
+                sb.append(' ')
+            }
+            sb.append('\n')
+        }
+
+        return sb.toString()
+    }
 }
 
 fun main() {
-    val g = Grid()
-    g.set(0, 0, 1)
-    g.set(1, 0, 2)
-    g.set(2, 0, 3)
-    g.set(0, 1, 4)
-    g.set(1, 1, 5)
-    g.set(2, 1, 6)
-    g.set(0, 2, 7)
-    g.set(1, 2, 8)
-    g.set(2, 2, 9)
-    println(g)
-    println(g.valid())
-    println(g.complete())
+    val s = Sudoku()
+    println(s)
 }
