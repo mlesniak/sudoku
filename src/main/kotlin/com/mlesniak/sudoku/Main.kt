@@ -79,9 +79,15 @@ class Sudoku {
                 val gy = y/3
                 sb.append(grids[gy][gx].get(x%3, y%3))
                 sb.append(' ')
+                if (x > 0 && x % 3 == 2) {
+                    sb.append(' ')
+                }
             }
             sb.append('\n')
-        }
+            if (y > 0 && y % 3 == 2) {
+                sb.append('\n')
+            }
+}
 
         return sb.toString()
     }
