@@ -45,7 +45,7 @@ class Grid {
         values[y][x] = value
     }
 
-    fun get(x: Int, y: Int) : Int = values[y][x]
+    fun get(x: Int, y: Int): Int = values[y][x]
 
     fun complete(): Boolean {
         val vals = values.flatten()
@@ -75,9 +75,9 @@ class Sudoku {
 
         for (y in 0 until 9) {
             for (x in 0 until 9) {
-                val gx = x/3
-                val gy = y/3
-                sb.append(grids[gy][gx].get(x%3, y%3))
+                val gx = x / 3
+                val gy = y / 3
+                sb.append(grids[gy][gx].get(x % 3, y % 3))
                 sb.append(' ')
                 if (x > 0 && x % 3 == 2) {
                     sb.append(' ')
@@ -87,7 +87,7 @@ class Sudoku {
             if (y > 0 && y % 3 == 2) {
                 sb.append('\n')
             }
-}
+        }
 
         return sb.toString()
     }
