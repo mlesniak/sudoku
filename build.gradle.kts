@@ -23,6 +23,5 @@ dependencies {
 //}
 //
 application {
-    // Define the main class for the application.
-    mainClass.set("com.mlesniak.sudoku.AppKt")
+    mainClass.set("com.mlesniak.sudoku.MainKt")
 }
