@@ -1,8 +1,8 @@
 package com.mlesniak.sudoku
 
-class Sudoku {
-    private val values: IntArray = IntArray(9*9) { 0 }
+import java.io.File
 
+class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
     override fun toString(): String {
         val sb = StringBuilder()
 
@@ -23,9 +23,18 @@ class Sudoku {
 
         return sb.toString()
     }
+
+    companion object {
+        fun read(filename: String): Sudoku {
+            val lines = File(filename).readLines()
+            val input = lines.joinToString().filter { it.isDigit() }
+            val ints = input.map { it.toString().toInt() }.toIntArray()
+            return Sudoku(ints)
+        }
+    }
 }
 
 fun main() {
-    val s = Sudoku()
+    val s = Sudoku.read("example.txt")
     println(s)
 }
