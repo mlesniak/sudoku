@@ -2,6 +2,7 @@ package com.mlesniak.sudoku
 
 import java.io.File
 
+// IDEA(mlesniak) Nicer interface?
 class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
     override fun toString(): String {
         val sb = StringBuilder()
@@ -24,6 +25,26 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
         return sb.toString()
     }
 
+    fun valid(): Boolean {
+        // Rows
+        for (row in 0..8) {
+            val rowValues = values.filterIndexed { index, _ -> index / 9 == row }
+            println(rowValues)
+        }
+
+        // Columns
+        // for (row in 0..8) {
+        //
+        // }
+        for (col in 0..8) {
+            val colValues = values.filterIndexed { index, _ -> index % 9 == col }
+            println(colValues)
+        }
+
+        // Grids
+        return true
+    }
+
     companion object {
         fun read(filename: String): Sudoku {
             val lines = File(filename).readLines()
@@ -37,4 +58,5 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
 fun main() {
     val s = Sudoku.read("example.txt")
     println(s)
+    s.valid()
 }
