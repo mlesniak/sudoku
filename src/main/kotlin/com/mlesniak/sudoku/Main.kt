@@ -28,21 +28,41 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
     fun valid(): Boolean {
         // Rows
         for (row in 0..8) {
-            val rowValues = values.filterIndexed { index, _ -> index / 9 == row }
+            val rowValues = values.filterIndexed { index, _ -> index / 9 == row }.sorted()
             println(rowValues)
         }
+        println()
 
         // Columns
-        // for (row in 0..8) {
-        //
-        // }
         for (col in 0..8) {
-            val colValues = values.filterIndexed { index, _ -> index % 9 == col }
+            val colValues = values.filterIndexed { index, _ -> index % 9 == col }.sorted()
             println(colValues)
         }
+        println()
 
         // Grids
+        for (row in 0..2) {
+            for (col in 0..2) {
+                println("\n$col/$row")
+
+                val gridValues = mutableListOf<Int>()
+                val rd = row * 3
+                val cd = col * 3
+                for (i in 0..2) {
+                    for (j in 0..2) {
+                        val cx = cd + j
+                        val cy = rd + i
+                        gridValues.add(get(cx, cy))
+                    }
+                }
+                println("  $gridValues")
+            }
+        }
         return true
+    }
+
+    private fun get(x: Int, y: Int): Int {
+        return values[y * 9 + x]
     }
 
     companion object {
