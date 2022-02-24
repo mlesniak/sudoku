@@ -31,20 +31,26 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
         // Rows
         for (row in 0..8) {
             val rowValues = values.filterIndexed { index, _ -> index / 9 == row }
-            for (i in 1..9) {
-                if (!rowValues.contains(i)) {
-                    return false
-                }
+            val counts = rowValues
+                .groupBy { it }
+                .filter { it.key != 0 }
+                .map { it.value.size }
+                .count { it > 1 }
+            if (counts > 0) {
+                return false
             }
         }
 
         // Columns
         for (col in 0..8) {
             val colValues = values.filterIndexed { index, _ -> index % 9 == col }
-            for (i in 1..9) {
-                if (!colValues.contains(i)) {
-                    return false
-                }
+            val counts = colValues
+                .groupBy { it }
+                .filter { it.key != 0 }
+                .map { it.value.size }
+                .count { it > 1 }
+            if (counts > 0) {
+                return false
             }
         }
 
@@ -61,13 +67,17 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
                         gridValues.add(get(cx, cy))
                     }
                 }
-                for (i in 1..9) {
-                    if (!gridValues.contains(i)) {
-                        return false
-                    }
+                val counts = gridValues
+                    .groupBy { it }
+                    .filter { it.key != 0 }
+                    .map { it.value.size }
+                    .count { it > 1 }
+                if (counts > 0) {
+                    return false
                 }
             }
         }
+
         return true
     }
 
@@ -78,9 +88,7 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
     }
 
     fun solve(): Sudoku? {
-//        println("Solving\n${toString()}")
         if (complete() && valid()) {
-//            println("Found")
             return this
         }
 
@@ -91,16 +99,16 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
             ?: return null
 
         // Iterate through all possible values and recurse.
-//        println("Unused index $unusedIndex")
         for (pv in 1..9) {
-//            println("  Trying out $pv")
             // Create copy.
             val copy = values.copyOf()
             copy[unusedIndex] = pv
             val sc = Sudoku(copy)
-            val solved = sc.solve()
-            if (solved != null) {
-                return solved
+            if (sc.valid()) {
+                val solved = sc.solve()
+                if (solved != null) {
+                    return solved
+                }
             }
         }
 
@@ -119,9 +127,8 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
 
 fun main() {
     // TODO: very slow for this example
-    // Complete vs valid
     val s = Sudoku.read("example.txt")
-//    val s = Sudoku.read("solved-except-one.txt")
+   // val s = Sudoku.read("solved-except-one.txt")
     val solution = s.solve()
     println("Solution:")
     println(solution)
