@@ -25,9 +25,8 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
         return sb.toString()
     }
 
-    // IDEA: We don't need to call valid() if we check that a number already exists
-    //       instead of pure brute-force. For now, let's see how fast that approach
-    //       is.
+    // just checks that the non-0 values are ok
+    // TODO Implement this
     fun valid(): Boolean {
         // Rows
         for (row in 0..8) {
@@ -72,13 +71,15 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
         return true
     }
 
+    fun complete(): Boolean = values.count { it > 0 } == 81
+
     private fun get(x: Int, y: Int): Int {
         return values[y * 9 + x]
     }
 
     fun solve(): Sudoku? {
 //        println("Solving\n${toString()}")
-        if (valid()) {
+        if (complete() && valid()) {
 //            println("Found")
             return this
         }
@@ -118,6 +119,7 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
 
 fun main() {
     // TODO: very slow for this example
+    // Complete vs valid
     val s = Sudoku.read("example.txt")
 //    val s = Sudoku.read("solved-except-one.txt")
     val solution = s.solve()
