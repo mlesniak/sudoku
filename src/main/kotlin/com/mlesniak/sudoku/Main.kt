@@ -28,23 +28,27 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
     fun valid(): Boolean {
         // Rows
         for (row in 0..8) {
-            val rowValues = values.filterIndexed { index, _ -> index / 9 == row }.sorted()
-            println(rowValues)
+            val rowValues = values.filterIndexed { index, _ -> index / 9 == row }
+            for (i in 1..9) {
+                if (!rowValues.contains(i)) {
+                    return false
+                }
+            }
         }
-        println()
 
         // Columns
         for (col in 0..8) {
-            val colValues = values.filterIndexed { index, _ -> index % 9 == col }.sorted()
-            println(colValues)
+            val colValues = values.filterIndexed { index, _ -> index % 9 == col }
+            for (i in 1..9) {
+                if (!colValues.contains(i)) {
+                    return false
+                }
+            }
         }
-        println()
 
         // Grids
         for (row in 0..2) {
             for (col in 0..2) {
-                println("\n$col/$row")
-
                 val gridValues = mutableListOf<Int>()
                 val rd = row * 3
                 val cd = col * 3
@@ -55,7 +59,11 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
                         gridValues.add(get(cx, cy))
                     }
                 }
-                println("  $gridValues")
+                for (i in 1..9) {
+                    if (!gridValues.contains(i)) {
+                        return false
+                    }
+                }
             }
         }
         return true
@@ -76,7 +84,8 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
 }
 
 fun main() {
-    val s = Sudoku.read("example.txt")
+//    val s = Sudoku.read("example.txt")
+    val s = Sudoku.read("solved.txt")
     println(s)
-    s.valid()
+    println(s.valid())
 }
