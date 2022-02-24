@@ -126,7 +126,6 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
 }
 
 fun main() {
-    // TODO: very slow for this example
     val s = Sudoku.read("example.txt")
    // val s = Sudoku.read("solved-except-one.txt")
     val solution = s.solve()
