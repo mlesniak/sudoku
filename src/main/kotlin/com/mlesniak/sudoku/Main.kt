@@ -25,6 +25,9 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
         return sb.toString()
     }
 
+    // IDEA: We don't need to call valid() if we check that a number already exists
+    //       instead of pure brute-force. For now, let's see how fast that approach
+    //       is.
     fun valid(): Boolean {
         // Rows
         for (row in 0..8) {
@@ -73,6 +76,36 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
         return values[y * 9 + x]
     }
 
+    fun solve(): Sudoku? {
+//        println("Solving\n${toString()}")
+        if (valid()) {
+//            println("Found")
+            return this
+        }
+
+        // Find an unused field.
+        val unusedIndex = values
+            .mapIndexed { index, i -> if (i == 0) index else -1 }
+            .firstOrNull { it >= 0 }
+            ?: return null
+
+        // Iterate through all possible values and recurse.
+//        println("Unused index $unusedIndex")
+        for (pv in 1..9) {
+//            println("  Trying out $pv")
+            // Create copy.
+            val copy = values.copyOf()
+            copy[unusedIndex] = pv
+            val sc = Sudoku(copy)
+            val solved = sc.solve()
+            if (solved != null) {
+                return solved
+            }
+        }
+
+        return null
+    }
+
     companion object {
         fun read(filename: String): Sudoku {
             val lines = File(filename).readLines()
@@ -85,7 +118,8 @@ class Sudoku(private val values: IntArray = IntArray(9 * 9) { 0 }) {
 
 fun main() {
 //    val s = Sudoku.read("example.txt")
-    val s = Sudoku.read("solved.txt")
-    println(s)
-    println(s.valid())
+    val s = Sudoku.read("solved-except-one.txt")
+    val solution = s.solve()
+    println("Solution:")
+    println(solution)
 }
