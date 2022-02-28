@@ -29,12 +29,7 @@ class Sudoku(
     private fun valid(): Boolean {
         // Rows
         for (row in 0..8) {
-            val rowValues = grid.filterIndexed { index, _ -> index / 9 == row }
-            val counts = rowValues
-                .groupBy { it }
-                .filter { it.key != 0 }
-                .map { it.value.size }
-                .count { it > 1 }
+            val counts = countValues { index, _ -> index / 9 == row }
             if (counts > 0) {
                 return false
             }
@@ -42,12 +37,7 @@ class Sudoku(
 
         // Columns
         for (col in 0..8) {
-            val colValues = grid.filterIndexed { index, _ -> index % 9 == col }
-            val counts = colValues
-                .groupBy { it }
-                .filter { it.key != 0 }
-                .map { it.value.size }
-                .count { it > 1 }
+            val counts = countValues { index, _ -> index % 9 == col }
             if (counts > 0) {
                 return false
             }
@@ -78,6 +68,16 @@ class Sudoku(
         }
 
         return true
+    }
+
+    private fun countValues(predicate: (index: Int, Int) -> Boolean): Int {
+        val rowValues = grid.filterIndexed(predicate)
+        val counts = rowValues
+            .groupBy { it }
+            .filter { it.key != 0 }
+            .map { it.value.size }
+            .count { it > 1 }
+        return counts
     }
 
     private fun complete(): Boolean = !grid.any { it == 0 }
