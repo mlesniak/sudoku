@@ -5,27 +5,11 @@ import java.io.File
 class Sudoku(
     private val grid: IntArray = IntArray(9 * 9) { 0 }
 ) {
-    override fun toString(): String {
-        val sb = StringBuilder()
 
-        for (y in 0 until 9) {
-            for (x in 0 until 9) {
-                val v = grid[y * 9 + x]
-                sb.append(v)
-                sb.append(' ')
-                if (x % 3 == 2) {
-                    sb.append(' ')
-                }
-            }
-            sb.append('\n')
-            if (y % 3 == 2) {
-                sb.append('\n')
-            }
-        }
-
-        return sb.toString()
-    }
-
+    /**
+     * True, if the current instance is valid for all non-empty
+     * fields.
+     */
     private fun valid(): Boolean {
         for (row in 0..8) {
             if (countValues { index, _ -> index / 9 == row } > 0) {
@@ -57,6 +41,10 @@ class Sudoku(
         return true
     }
 
+    /**
+     * Count all values in the grid matching the predicate which occur
+     * more than once.
+     */
     private fun countValues(predicate: (index: Int, Int) -> Boolean): Int {
         return grid
             .filterIndexed(predicate)
@@ -66,11 +54,10 @@ class Sudoku(
             .count { it > 1 }
     }
 
+    /**
+     * True if the current instance has no empty fields.
+     */
     private fun complete(): Boolean = !grid.any { it == 0 }
-
-    private fun get(x: Int, y: Int): Int {
-        return grid[y * 9 + x]
-    }
 
     fun solve(): Sudoku? {
         if (complete() && valid()) {
@@ -100,19 +87,33 @@ class Sudoku(
         return null
     }
 
-    /*
+    override fun toString(): String {
+        val sb = StringBuilder()
 
-        backtrack(v[1..k]) {
-            if v is a solution
-                report v
-            else
-                 for each promising choice of x
-                    backtrack(v[1..k];v[k+1]<-x)
-           }
+        for (y in 0 until 9) {
+            for (x in 0 until 9) {
+                val v = grid[y * 9 + x]
+                sb.append(v)
+                sb.append(' ')
+                if (x % 3 == 2) {
+                    sb.append(' ')
+                }
+            }
+            sb.append('\n')
+            if (y % 3 == 2) {
+                sb.append('\n')
+            }
+        }
 
-     */
+        return sb.toString()
+    }
 
     companion object {
+        /**
+         * Read a Sudoku input file by parsing the first 81 digits it can
+         * read, ignoring all non-digit characters. The number 0 depicts
+         * an empty cell.
+         */
         fun read(filename: String): Sudoku {
             val initialValues = File(filename)
                 .readLines()
@@ -126,10 +127,7 @@ class Sudoku(
 }
 
 fun main() {
-//    val s = Sudoku.read("hard.txt")
-    val s = Sudoku.read("example.txt")
-    // val s = Sudoku.read("solved-except-one.txt")
-    val solution = s.solve()
-    println("Solution:")
+    val filename = "example.txt"
+    val solution = Sudoku.read(filename).solve()
     println(solution)
 }
