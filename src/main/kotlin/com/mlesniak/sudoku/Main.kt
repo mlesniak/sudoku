@@ -45,14 +45,12 @@ class Sudoku(
      * Count all values in the grid matching the predicate which occur
      * more than once.
      */
-    private fun countValues(predicate: (index: Int, Int) -> Boolean): Int {
-        return grid
-            .filterIndexed(predicate)
-            .groupBy { it }
-            .filter { it.key != 0 }
-            .map { it.value.size }
-            .count { it > 1 }
-    }
+    private fun countValues(predicate: (index: Int, Int) -> Boolean): Int = grid
+        .filterIndexed(predicate)
+        .groupBy { it }
+        .filter { it.key != 0 }
+        .map { it.value.size }
+        .count { it > 1 }
 
     /**
      * True if the current instance has no empty fields.
@@ -89,22 +87,20 @@ class Sudoku(
 
     // I'm still not sure if this is a kotlin show of and a better version
     // than the imperative StringBuilder version...
-    override fun toString(): String {
-        return grid
-            .joinToString("")
-            .chunked(9 * 3)
-            .map { block ->
-                block.chunked(9)
-                    .map { row ->
-                        row
-                            .chunked(3)
-                            .joinToString(" ") {
-                                it.map { "$it " }.joinToString("")
-                            }
-                    }
-            }
-            .joinToString("\n\n") { it.joinToString("\n") }
-    }
+    override fun toString(): String = grid
+        .joinToString("")
+        .chunked(9 * 3)
+        .map { block ->
+            block.chunked(9)
+                .map { row ->
+                    row
+                        .chunked(3)
+                        .joinToString(" ") {
+                            it.map { "$it " }.joinToString("")
+                        }
+                }
+        }
+        .joinToString("\n\n") { it.joinToString("\n") }
 
     companion object {
         /**
