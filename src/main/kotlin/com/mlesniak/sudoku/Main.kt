@@ -50,7 +50,12 @@ class Sudoku(
      * True if the current instance is solved, i.e. has
      * no empty fields and is empty.
      */
-    private fun solved(): Boolean = !grid.any { it == 0 } && valid()
+    private fun solved(): Boolean = complete() && valid()
+
+    /**
+     * True if the grid has completely been filled out.
+     */
+    private fun complete(): Boolean = !grid.any { it == 0 }
 
     /**
      * Solve the current Sudoku instance. Returns a complete field if the instance
