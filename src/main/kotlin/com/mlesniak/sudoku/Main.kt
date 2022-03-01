@@ -11,16 +11,12 @@ class Sudoku(
      * fields.
      */
     private fun valid(): Boolean {
-        for (row in 0..8) {
-            if (countValues { index, _ -> index / 9 == row } > 0) {
-                return false
-            }
+        if ((0..8).any { row -> (hasDuplicates { it / 9 == row }) }) {
+            return false
         }
 
-        for (col in 0..8) {
-            if (countValues { index, _ -> index % 9 == col } > 0) {
-                return false
-            }
+        if ((0..8).any { col -> (hasDuplicates { it % 9 == col }) }) {
+            return false
         }
 
         // Grids
@@ -32,7 +28,7 @@ class Sudoku(
                         gridPositions.add((row * 3 + i) * 9 + (col * 3 + j))
                     }
                 }
-                if (countValues { index, _ -> index in gridPositions } > 0) {
+                if (hasDuplicates { it in gridPositions }) {
                     return false
                 }
             }
@@ -42,15 +38,15 @@ class Sudoku(
     }
 
     /**
-     * Count all values in the grid matching the predicate which occur
-     * more than once.
+     * Check, if at least one of the values in the grid which match the predicate
+     * occur more than.
      */
-    private fun countValues(predicate: (index: Int, Int) -> Boolean): Int = grid
-        .filterIndexed(predicate)
+    private fun hasDuplicates(predicate: (index: Int) -> Boolean): Boolean = grid
+        .filterIndexed { index, _ -> predicate(index) }
         .groupBy { it }
         .filter { it.key != 0 }
         .map { it.value.size }
-        .count { it > 1 }
+        .count { it > 1 } > 0
 
     /**
      * True if the current instance has no empty fields.
@@ -85,7 +81,7 @@ class Sudoku(
         return null
     }
 
-    // I'm still not sure if this is a kotlin show of and a better version
+    // I'm still not sure if this is a kotlin show off and a better version
     // than the imperative StringBuilder version...
     override fun toString(): String = grid
         .joinToString("")
