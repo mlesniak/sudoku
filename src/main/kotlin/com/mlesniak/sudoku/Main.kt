@@ -52,6 +52,10 @@ class Sudoku(
      */
     private fun solved(): Boolean = !grid.any { it == 0 } && valid()
 
+    /**
+     * Solve the current Sudoku instance. Returns a complete field if the instance
+     * is solvable, or null otherwise.
+     */
     fun solve(): Sudoku? {
         if (solved()) {
             return this
