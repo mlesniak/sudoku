@@ -2,11 +2,16 @@ package com.mlesniak.sudoku
 
 import java.io.File
 
-// TODO(mlesniak) Comment
+/**
+ * This is a basic Sudoku solver which uses backtracking.
+ *
+ * Read a new Sudoki using `Sudoku.read`, then solve it via
+ * `solve()`. Finally, the solved Sudoku can be shown via
+ * the `toString()` method.
+ */
 class Sudoku(
     private val grid: IntArray = IntArray(9 * 9) { 0 }
 ) {
-
     /**
      * True, if the current instance is valid for all non-empty fields.
      */
@@ -72,14 +77,9 @@ class Sudoku(
             ?: return null
 
         (1..9).forEach { potentialValue ->
-            val copy = grid.copyOf()
-            copy[changeableField] = potentialValue
-            with(Sudoku(copy)) {
+            with(update(changeableField, potentialValue)) {
                 if (valid()) {
-                    val solved = solve()
-                    if (solved != null) {
-                        return solved
-                    }
+                    solve()?.apply { return this }
                 }
             }
         }
@@ -87,8 +87,19 @@ class Sudoku(
         return null
     }
 
-    // I'm still not sure if this is a kotlin show off and a better version
-    // than the imperative StringBuilder version...
+    /**
+     * Create a new instance with value at index updated.
+     */
+    private fun update(index: Int, value: Int): Sudoku =
+        Sudoku(
+            grid.copyOf().apply {
+                this[index] = value
+            }
+        )
+
+    // I'm still not sure if this is a kotlin show off and demonstration
+    // of bad practices and the better version si  the imperative
+    // StringBuilder...
     override fun toString(): String = grid
         .joinToString("")
         .chunked(9 * 3)
