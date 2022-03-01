@@ -7,8 +7,7 @@ class Sudoku(
 ) {
 
     /**
-     * True, if the current instance is valid for all non-empty
-     * fields.
+     * True, if the current instance is valid for all non-empty fields.
      */
     private fun valid(): Boolean {
         if ((0..8).any { row -> (hasDuplicates { it / 9 == row }) }) {
@@ -19,13 +18,11 @@ class Sudoku(
             return false
         }
 
-        // Grids
-        for (row in 0..2) {
-            for (col in 0..2) {
-                val gridPositions = mutableListOf<Int>()
-                for (i in 0..2) {
-                    for (j in 0..2) {
-                        gridPositions.add((row * 3 + i) * 9 + (col * 3 + j))
+        (0..2).map { row ->
+            (0..2).map { col ->
+                val gridPositions = (0..2).flatMap { i ->
+                    (0..2).map { j ->
+                        (row * 3 + i) * 9 + (col * 3 + j)
                     }
                 }
                 if (hasDuplicates { it in gridPositions }) {
