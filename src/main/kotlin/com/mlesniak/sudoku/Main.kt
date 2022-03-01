@@ -2,6 +2,7 @@ package com.mlesniak.sudoku
 
 import java.io.File
 
+// TODO(mlesniak) Comment
 class Sudoku(
     private val grid: IntArray = IntArray(9 * 9) { 0 }
 ) {
@@ -36,7 +37,7 @@ class Sudoku(
 
     /**
      * Check, if at least one of the values in the grid which match the predicate
-     * occur more than.
+     * (and are non-empty) occur more than.
      */
     private fun hasDuplicates(predicate: (index: Int) -> Boolean): Boolean = grid
         .filterIndexed { index, _ -> predicate(index) }
@@ -46,12 +47,13 @@ class Sudoku(
         .count { it > 1 } > 0
 
     /**
-     * True if the current instance has no empty fields.
+     * True if the current instance is solved, i.e. has
+     * no empty fields and is empty.
      */
-    private fun complete(): Boolean = !grid.any { it == 0 }
+    private fun solved(): Boolean = !grid.any { it == 0 } && valid()
 
     fun solve(): Sudoku? {
-        if (complete() && valid()) {
+        if (solved()) {
             return this
         }
 
