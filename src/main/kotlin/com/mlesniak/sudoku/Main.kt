@@ -87,25 +87,23 @@ class Sudoku(
         return null
     }
 
+    // I'm still not sure if this is a kotlin show of and a better version
+    // than the imperative StringBuilder version...
     override fun toString(): String {
-        val sb = StringBuilder()
-
-        for (y in 0 until 9) {
-            for (x in 0 until 9) {
-                val v = grid[y * 9 + x]
-                sb.append(v)
-                sb.append(' ')
-                if (x % 3 == 2) {
-                    sb.append(' ')
-                }
+        return grid
+            .joinToString("")
+            .chunked(9 * 3)
+            .map { block ->
+                block.chunked(9)
+                    .map { row ->
+                        row
+                            .chunked(3)
+                            .joinToString(" ") {
+                                it.map { "$it " }.joinToString("")
+                            }
+                    }
             }
-            sb.append('\n')
-            if (y % 3 == 2) {
-                sb.append('\n')
-            }
-        }
-
-        return sb.toString()
+            .joinToString("\n\n") { it.joinToString("\n") }
     }
 
     companion object {
@@ -128,6 +126,8 @@ class Sudoku(
 
 fun main() {
     val filename = "example.txt"
-    val solution = Sudoku.read(filename).solve()
+
+    val sudoku = Sudoku.read(filename)
+    val solution = sudoku.solve()
     println(solution)
 }
