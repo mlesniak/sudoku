@@ -57,22 +57,20 @@ class Sudoku(
             return this
         }
 
-        // Find an unused field.
-        val unusedIndex = grid
+        val changeableField = grid
             .mapIndexed { index, i -> if (i == 0) index else -1 }
             .firstOrNull { it >= 0 }
             ?: return null
 
-        // Iterate through all possible values and recurse.
-        for (pv in 1..9) {
-            // Create copy.
+        (1..9).forEach { potentialValue ->
             val copy = grid.copyOf()
-            copy[unusedIndex] = pv
-            val sc = Sudoku(copy)
-            if (sc.valid()) {
-                val solved = sc.solve()
-                if (solved != null) {
-                    return solved
+            copy[changeableField] = potentialValue
+            with(Sudoku(copy)) {
+                if (valid()) {
+                    val solved = solve()
+                    if (solved != null) {
+                        return solved
+                    }
                 }
             }
         }
